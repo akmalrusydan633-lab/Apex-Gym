@@ -1,0 +1,6 @@
+{
+  "name": "Apex Athletic Club — Performance Gym",
+  "description": "A private athletic club and high-performance gym where progressive coaching meets championship-grade equipment.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

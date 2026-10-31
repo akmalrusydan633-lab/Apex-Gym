@@ -1,0 +1,3414 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Apex Athletic Club — Performance Gym &amp; Registration</title>
+  <meta name="description" content="A private athletic club and high-performance gym where progressive coaching meets championship-grade equipment." />
+  <meta property="og:title" content="Apex Athletic Club — Performance Gym &amp; Registration" />
+  <meta property="og:description" content="A private athletic club and high-performance gym where progressive coaching meets championship-grade equipment." />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <!-- Google Font: Onest (weights 400, 500) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500&display=swap" rel="stylesheet" />
+
+  <!-- Importmap for Lenis -->
+  <script type="importmap">
+  {
+    "imports": {
+      "lenis": "https://cdn.jsdelivr.net/npm/lenis@1.1.18/+esm"
+    }
+  }
+  </script>
+
+  <style>
+    /* ----------------------------------------------------
+       Adaptive Rem Grid
+       Design base width = 1920px. Base: 16px = 1rem.
+       Media queries scale DOWN below 1920px.
+       JS scales UP above 1920px.
+       ---------------------------------------------------- */
+    html {
+      font-size: 16px;
+      box-sizing: border-box;
+      scroll-behavior: auto; /* Lenis handles smooth scrolling */
+    }
+    @media (max-width: 1920px) { html { font-size: 0.833333vw; } }
+    @media (max-width: 1440px) { html { font-size: 1.111111vw; } }
+    @media (max-width: 1024px) { html { font-size: 1.5625vw; } }
+    @media (max-width: 640px)  { html { font-size: 4.444444vw; } }
+
+    /* CSS Reset & Variables */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --background: #ffffff;
+      --foreground: #0a0a0a;
+      --brand: #2563c9;        /* primary royal blue */
+      --brand-deep: #0f2f63;   /* deep navy — hero/stats/footer base */
+      --brand-light: #5790e6;  /* light blue accent / focus ring */
+      --accent-teal: #0b6e97;  /* blue caption tint */
+      --surface: #f4f4f4;      /* off-white section bg */
+      --surface-card: #ffffff;
+      --ink: #0a0a0a;          /* near-black headings */
+      --ink-soft: #717784;     /* muted body */
+      --ghost: #d7dae1;        /* oversized ghost text */
+      --hairline: #e6e8ec;     /* subtle borders */
+      --on-brand: #ffffff;     /* text on navy */
+
+      /* radii */
+      --radius-card: 1.5rem;
+      --radius-card-lg: 2rem;
+      --radius-pill: 62.5rem;
+      --radius-xl: 0.75rem;
+
+      /* transitions & easings */
+      --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+      --ease-in-out-cubic: cubic-bezier(0.65, 0, 0.35, 1);
+    }
+
+    body {
+      min-height: 100vh;
+      background: var(--background);
+      color: var(--foreground);
+      font-family: "Onest", system-ui, -apple-system, sans-serif;
+      font-weight: 400;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+      height: auto;
+    }
+
+    button {
+      cursor: pointer;
+      font-family: inherit;
+      border: none;
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    ul, ol {
+      list-style: none;
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--brand-light);
+      outline-offset: 2px;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    /* Page container */
+    main {
+      width: 100%;
+      overflow-x: clip;
+      padding: 0.5rem;
+    }
+    @media (min-width: 640px) {
+      main {
+        padding: 0.75rem;
+      }
+    }
+
+    /* ----------------------------------------------------
+       Shared Components & Utilities
+       ---------------------------------------------------- */
+    /* Eyebrow */
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.22em;
+    }
+    .eyebrow-dot {
+      width: 0.375rem;
+      height: 0.375rem;
+      border-radius: var(--radius-pill);
+      flex-shrink: 0;
+    }
+    .eyebrow.tone-dark {
+      color: var(--ink-soft);
+    }
+    .eyebrow.tone-dark .eyebrow-dot {
+      background: var(--brand);
+    }
+    .eyebrow.tone-light {
+      color: rgba(255, 255, 255, 0.7);
+    }
+    .eyebrow.tone-light .eyebrow-dot {
+      background: var(--brand-light);
+    }
+
+    /* Pill Button */
+    .pill-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      border-radius: var(--radius-pill);
+      padding: 0.875rem 1.75rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+      cursor: pointer;
+      user-select: none;
+      white-space: nowrap;
+    }
+    .pill-btn svg {
+      width: 1rem;
+      height: 1rem;
+      transition: transform 0.25s var(--ease-out-expo);
+    }
+    @media (min-width: 769px) {
+      .pill-btn:hover svg {
+        transform: translateX(5px);
+      }
+    }
+
+    .pill-btn.variant-light {
+      background: #ffffff;
+      color: var(--brand-deep);
+    }
+    @media (min-width: 769px) {
+      .pill-btn.variant-light:hover {
+        background: var(--brand-light);
+        color: #ffffff;
+      }
+    }
+
+    .pill-btn.variant-solid {
+      background: var(--ink);
+      color: #ffffff;
+    }
+    @media (min-width: 769px) {
+      .pill-btn.variant-solid:hover {
+        background: var(--brand-deep);
+      }
+    }
+
+    .pill-btn.variant-outline {
+      background: transparent;
+      border: 1px solid currentColor;
+      color: var(--ink);
+    }
+    @media (min-width: 769px) {
+      .pill-btn.variant-outline:hover {
+        background: var(--ink);
+        color: #ffffff;
+      }
+    }
+
+    /* Arrow Button (Carousel) */
+    .arrow-btn {
+      width: 3rem;
+      height: 3rem;
+      border-radius: var(--radius-pill);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+      flex-shrink: 0;
+    }
+    @media (min-width: 640px) {
+      .arrow-btn {
+        width: 3.5rem;
+        height: 3.5rem;
+      }
+    }
+    .arrow-btn svg {
+      width: 1.25rem;
+      height: 1.25rem;
+      transition: transform 0.25s var(--ease-out-expo);
+    }
+    @media (min-width: 769px) {
+      .arrow-btn:hover svg {
+        transform: scale(1.15);
+      }
+      .arrow-btn.prev:hover svg {
+        transform: scaleX(-1) scale(1.15);
+      }
+    }
+    .arrow-btn.prev svg {
+      transform: scaleX(-1);
+    }
+    .arrow-btn.variant-outline {
+      border: 1px solid var(--hairline);
+      background: transparent;
+      color: var(--ink);
+    }
+    @media (min-width: 769px) {
+      .arrow-btn.variant-outline:hover {
+        border-color: var(--ink);
+      }
+    }
+    .arrow-btn.variant-solid {
+      border: 1px solid var(--ink);
+      background: var(--ink);
+      color: #ffffff;
+    }
+    @media (min-width: 769px) {
+      .arrow-btn.variant-solid:hover {
+        background: var(--brand-deep);
+        border-color: var(--brand-deep);
+      }
+    }
+
+    /* Carousel Dots */
+    .carousel-dots {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .dot-btn {
+      padding: 0.375rem;
+      display: grid;
+      place-items: center;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+    }
+    .dot-pill {
+      height: 0.375rem;
+      border-radius: var(--radius-pill);
+      transition: width 0.35s var(--ease-out-expo), background-color 0.2s ease;
+    }
+    .carousel-dots.tone-light .dot-pill {
+      background: rgba(255, 255, 255, 0.4);
+      width: 0.375rem;
+    }
+    .carousel-dots.tone-light .dot-btn[aria-current="true"] .dot-pill {
+      background: #ffffff;
+      width: 1.25rem;
+    }
+    .carousel-dots.tone-dark .dot-pill {
+      background: var(--ghost);
+      width: 0.375rem;
+    }
+    .carousel-dots.tone-dark .dot-btn[aria-current="true"] .dot-pill {
+      background: var(--ink);
+      width: 1.25rem;
+    }
+
+    /* Stacked Lines Reveal Primitive */
+    .stacked-line-clip {
+      display: block;
+      overflow: hidden;
+      padding-bottom: 0.14em;
+    }
+    .stacked-line-inner {
+      display: block;
+      transform: translateY(115%);
+      opacity: 0;
+      transition: transform 0.95s var(--ease-out-expo), opacity 0.95s var(--ease-out-expo);
+      will-change: transform, opacity;
+    }
+    .stacked-line-inner.revealed {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* Clip-mask Word Reveal Primitive */
+    .word-clip {
+      display: inline-block;
+      overflow: hidden;
+      padding-bottom: 0.14em;
+      vertical-align: top;
+    }
+    .word-inner {
+      display: inline-block;
+      transform: translateY(115%);
+      opacity: 0;
+      transition: transform 1.1s var(--ease-out-expo), opacity 1.1s var(--ease-out-expo);
+      will-change: transform, opacity;
+    }
+    .word-inner.revealed {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* Inview base */
+    .inview-node {
+      opacity: 0;
+      will-change: transform, opacity;
+    }
+
+    /* ----------------------------------------------------
+       Intro Curtain Loader
+       ---------------------------------------------------- */
+    #intro-loader {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: var(--brand-deep);
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+      transition: transform 0.85s var(--ease-in-out-cubic);
+      will-change: transform;
+    }
+    #intro-loader.loader-exit {
+      transform: translateY(-105%);
+    }
+    .loader-wordmark {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.6s var(--ease-out-expo), transform 0.6s var(--ease-out-expo);
+    }
+    .loader-wordmark.revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .loader-wordmark svg {
+      width: 1.75rem;
+      height: 1.75rem;
+    }
+    .loader-wordmark span {
+      font-size: 1.5rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+    }
+    .loader-progress-track {
+      width: 10rem;
+      height: 1px;
+      border-radius: var(--radius-pill);
+      background: rgba(255, 255, 255, 0.2);
+      overflow: hidden;
+    }
+    .loader-progress-fill {
+      width: 100%;
+      height: 100%;
+      background: #ffffff;
+      transform-origin: left;
+      transform: scaleX(0);
+      transition: transform 1.28s var(--ease-in-out-cubic);
+    }
+    .loader-progress-fill.fill-active {
+      transform: scaleX(1);
+    }
+
+    /* ----------------------------------------------------
+       1 & 2. Hero Section
+       ---------------------------------------------------- */
+    #hero {
+      position: relative;
+      isolate: isolate;
+      overflow: hidden;
+      background: var(--brand-deep);
+      color: #ffffff;
+      border-radius: var(--radius-card-lg);
+      height: calc(100svh - 1rem);
+      min-height: 36rem;
+      display: flex;
+      flex-direction: column;
+    }
+    @media (min-width: 640px) {
+      #hero {
+        height: calc(100svh - 1.5rem);
+      }
+    }
+
+    .hero-parallax-plate {
+      position: absolute;
+      inset: 0;
+      z-index: -10;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .hero-parallax-inner {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: -16%;
+      height: 132%;
+      width: 100%;
+      will-change: transform;
+    }
+    .hero-parallax-inner img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .hero-parallax-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(15, 47, 99, 0.72),
+        rgba(15, 47, 99, 0.42),
+        rgba(15, 47, 99, 0.82)
+      );
+    }
+
+    /* Header */
+    .hero-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.5rem 1.5rem 0;
+      font-size: 0.75rem;
+      color: #ffffff;
+      z-index: 10;
+    }
+    @media (min-width: 640px) {
+      .hero-header {
+        padding: 2rem 2.5rem 0;
+      }
+    }
+    .hero-nav-left {
+      flex: 1;
+      display: none;
+      gap: 2rem;
+      align-items: center;
+    }
+    @media (min-width: 1024px) {
+      .hero-nav-left {
+        display: flex;
+      }
+    }
+    .hero-nav-left a {
+      color: rgba(255, 255, 255, 0.9);
+      transition: color 0.2s ease;
+    }
+    .hero-nav-left a:hover {
+      color: #ffffff;
+    }
+
+    .hero-brand {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 0.5rem;
+      font-size: 1rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+    }
+    @media (min-width: 1024px) {
+      .hero-brand {
+        justify-content: center;
+      }
+    }
+    .hero-brand svg {
+      width: 1.25rem;
+      height: 1.25rem;
+      flex-shrink: 0;
+    }
+
+    .hero-nav-right {
+      flex: 1;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 1rem;
+    }
+    @media (min-width: 640px) {
+      .hero-nav-right {
+        gap: 1.25rem;
+      }
+    }
+    .btn-book-header {
+      display: none;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-weight: 500;
+      font-size: 0.75rem;
+      color: #ffffff;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+    }
+    @media (min-width: 640px) {
+      .btn-book-header {
+        display: inline-block;
+      }
+    }
+    .btn-book-header:hover {
+      text-decoration: underline;
+      text-underline-offset: 4px;
+    }
+
+    .burger-btn {
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: var(--radius-pill);
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+    .burger-btn:hover {
+      background: rgba(255, 255, 255, 0.25);
+    }
+    .burger-bar {
+      width: 1rem;
+      height: 1px;
+      background: #ffffff;
+    }
+
+    /* Hero Giant Title */
+    .hero-title-block {
+      padding: 1rem 1.5rem 0;
+    }
+    @media (min-width: 640px) {
+      .hero-title-block {
+        padding: 1rem 2.5rem 0;
+      }
+    }
+    #hero-title {
+      font-size: 12.5vw;
+      font-weight: 500;
+      text-transform: uppercase;
+      line-height: 0.85;
+      letter-spacing: -0.02em;
+      white-space: nowrap;
+      user-select: none;
+    }
+
+    /* Hero Bottom Row */
+    .hero-bottom-row {
+      margin-top: auto;
+      padding: 0 1.5rem 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      z-index: 10;
+    }
+    @media (min-width: 640px) {
+      .hero-bottom-row {
+        padding: 0 2.5rem 2.5rem;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-end;
+      }
+    }
+    .hero-tagline {
+      font-size: 2.4rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+      color: rgba(255, 255, 255, 0.85);
+    }
+
+    .hero-right-cluster {
+      display: flex;
+      align-items: flex-end;
+      gap: 1rem;
+    }
+
+    /* Hero Collection Slider */
+    .hero-collection-slider {
+      display: none;
+      width: 16rem;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    @media (min-width: 768px) {
+      .hero-collection-slider {
+        display: flex;
+      }
+    }
+    .collection-card-wrapper {
+      position: relative;
+      height: 5rem;
+    }
+    .collection-card {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: row;
+      gap: 0.75rem;
+      border-radius: var(--radius-card);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.1);
+      padding: 0.75rem;
+      box-shadow: 0 10px 30px rgba(15, 47, 99, 0.2);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      align-items: center;
+      transition: opacity 0.5s ease, transform 0.5s ease;
+      pointer-events: none;
+      opacity: 0;
+      transform: translateY(16px) scale(0.96);
+    }
+    .collection-card.active {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+    }
+    .collection-thumb {
+      width: 3.5rem;
+      height: 3.5rem;
+      border-radius: var(--radius-xl);
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+    .collection-info {
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+      overflow: hidden;
+    }
+    .collection-brand {
+      font-size: 0.7rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #ffffff;
+    }
+    .collection-title {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      opacity: 0.8;
+      color: #ffffff;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+    .collection-cta {
+      font-size: 0.65rem;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      color: #ffffff;
+      margin-top: 0.2rem;
+    }
+
+    /* Hero Membership Card */
+    .hero-membership-card {
+      width: 100%;
+      max-width: 20rem;
+      border-radius: var(--radius-card);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.1);
+      padding: 0.75rem;
+      box-shadow: 0 10px 30px rgba(15, 47, 99, 0.2);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      display: flex;
+      flex-direction: row;
+      gap: 0.75rem;
+      align-items: stretch;
+    }
+    @media (min-width: 640px) {
+      .hero-membership-card {
+        width: 15rem;
+      }
+    }
+    .membership-col-left {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 0.5rem;
+    }
+    .membership-value {
+      font-size: 1.875rem;
+      font-weight: 500;
+      line-height: 1;
+    }
+    .membership-avatars-row {
+      display: flex;
+      align-items: center;
+    }
+    .membership-avatar {
+      width: 1.25rem;
+      height: 1.25rem;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(15, 47, 99, 0.4);
+      margin-left: -0.5rem;
+    }
+    .membership-avatar:first-child {
+      margin-left: 0;
+    }
+    .membership-caption {
+      font-size: 0.65rem;
+      opacity: 0.8;
+    }
+    .membership-thumb {
+      width: 4rem;
+      aspect-ratio: 3/4;
+      border-radius: var(--radius-xl);
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+
+    /* ----------------------------------------------------
+       3. Trust Section
+       ---------------------------------------------------- */
+    #trust {
+      position: relative;
+      isolate: isolate;
+      overflow: hidden;
+      background: var(--background);
+      padding: 4rem 1.5rem;
+    }
+    @media (min-width: 640px) {
+      #trust {
+        padding: 5rem 2.5rem;
+      }
+    }
+
+    .trust-badges-row {
+      position: relative;
+      z-index: 20;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    @media (min-width: 640px) {
+      .trust-badges-row {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-start;
+      }
+    }
+
+    .percentage-badge {
+      width: 7rem;
+      height: 7rem;
+      border-radius: var(--radius-pill);
+      background: var(--surface);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 0.5rem;
+      flex-shrink: 0;
+    }
+    @media (min-width: 640px) {
+      .percentage-badge {
+        width: 8rem;
+        height: 8rem;
+      }
+    }
+    .percentage-badge .val {
+      font-size: 1.5rem;
+      font-weight: 500;
+      line-height: 1;
+    }
+    .percentage-badge .desc {
+      font-size: 0.6rem;
+      color: var(--ink-soft);
+      max-width: 7em;
+      line-height: 1.2;
+      margin-top: 0.35rem;
+    }
+
+    .trust-badge-card {
+      max-width: 28rem;
+      border-radius: var(--radius-card);
+      background: var(--surface);
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    @media (min-width: 640px) {
+      .trust-badge-card {
+        padding: 1.5rem;
+        gap: 1.25rem;
+      }
+    }
+    .trust-index-chip {
+      display: inline-block;
+      border-radius: var(--radius-xl);
+      background: var(--background);
+      padding: 0.5rem 1rem;
+      font-size: 1.25rem;
+      font-weight: 500;
+      align-self: flex-start;
+    }
+    .trust-badge-title {
+      font-size: 1.125rem;
+      font-weight: 500;
+      color: var(--ink);
+    }
+    .trust-badge-body {
+      font-size: 0.75rem;
+      color: var(--ink-soft);
+      line-height: 1.6;
+    }
+
+    /* Oversized Ghost Heading */
+    #trust-title {
+      position: relative;
+      pointer-events: none;
+      z-index: 0;
+      user-select: none;
+      max-width: 88rem;
+      margin: 3rem auto 0;
+      font-size: 8.2vw;
+      font-weight: 500;
+      text-transform: uppercase;
+      line-height: 1.02;
+      letter-spacing: -0.02em;
+    }
+    .ghost-row {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+    }
+    .ghost-word-wrapper {
+      display: inline-block;
+      overflow: hidden;
+      padding-bottom: 0.12em;
+      will-change: transform;
+    }
+    .ghost-word-inner {
+      display: inline-block;
+      transform: translateY(115%);
+      opacity: 0;
+      transition: transform 0.7s var(--ease-out-expo), opacity 0.7s var(--ease-out-expo);
+      will-change: transform, opacity;
+    }
+    .ghost-word-inner.revealed {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    .ghost-color {
+      color: var(--ghost);
+    }
+    .ink-color {
+      color: var(--ink);
+    }
+
+    /* Center Coach Card */
+    .coach-card-container {
+      position: relative;
+      z-index: 10;
+      width: 13rem;
+      margin: 2rem auto;
+    }
+    @media (min-width: 640px) {
+      .coach-card-container {
+        position: absolute;
+        left: 50%;
+        top: 52%;
+        transform: translate(-50%, -50%);
+        width: 16rem;
+        margin: 0;
+      }
+    }
+    .coach-card-figure {
+      position: relative;
+      transform: rotate(6deg);
+      aspect-ratio: 3/4;
+      border-radius: var(--radius-card);
+      background: var(--brand);
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(15, 47, 99, 0.15);
+    }
+    .coach-photo-wrapper {
+      position: absolute;
+      inset: 0;
+      transition: opacity 0.4s ease;
+    }
+    .coach-photo-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .coach-caption {
+      position: absolute;
+      left: 0.75rem;
+      right: 0.75rem;
+      bottom: 0.75rem;
+      border-radius: var(--radius-xl);
+      background: rgba(15, 47, 99, 0.4);
+      color: #ffffff;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      padding: 0.5rem 0.75rem;
+      z-index: 2;
+    }
+    .coach-name {
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+    .coach-role {
+      font-size: 0.65rem;
+      opacity: 0.8;
+      margin-top: 0.15rem;
+    }
+
+    /* Trust Controls Row */
+    .trust-controls-row {
+      position: relative;
+      z-index: 20;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 3rem;
+    }
+    @media (min-width: 640px) {
+      .trust-controls-row {
+        margin-top: 6rem;
+      }
+    }
+
+    /* ----------------------------------------------------
+       4. Programs Section
+       ---------------------------------------------------- */
+    #programs {
+      background: var(--surface);
+      padding: 6rem 1.5rem;
+    }
+    @media (min-width: 640px) {
+      #programs {
+        padding: 6rem 2.5rem;
+      }
+    }
+    #programs-title {
+      font-size: 3rem;
+      font-weight: 500;
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+      margin-top: 1rem;
+      color: var(--ink);
+    }
+    .programs-list {
+      margin-top: 3.5rem;
+    }
+    .program-row {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      padding: 1.75rem 0;
+      border-top: 1px solid var(--hairline);
+      transition: background-color 0.2s ease, padding-left 0.2s ease, padding-right 0.2s ease;
+      text-decoration: none;
+      color: inherit;
+    }
+    .program-row:last-child {
+      border-bottom: 1px solid var(--hairline);
+    }
+    .program-row:hover,
+    .program-row:focus-visible {
+      background: var(--background);
+      padding-left: 1rem;
+      padding-right: 1rem;
+      border-radius: var(--radius-xl);
+    }
+    .program-index {
+      width: 2.5rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--ink-soft);
+      flex-shrink: 0;
+    }
+    .program-content {
+      flex: 1;
+    }
+    .program-name {
+      font-size: 1.5rem;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+    }
+    @media (min-width: 640px) {
+      .program-name {
+        font-size: 1.875rem;
+      }
+    }
+    .program-desc {
+      font-size: 0.875rem;
+      color: var(--ink-soft);
+      margin-top: 0.25rem;
+    }
+    .program-arrow-circle {
+      width: 2.75rem;
+      height: 2.75rem;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--hairline);
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      margin-left: auto;
+    }
+    .program-arrow-circle svg {
+      width: 1.25rem;
+      height: 1.25rem;
+      opacity: 0.55;
+      transform: translateX(0);
+      transition: transform 0.25s var(--ease-out-expo), opacity 0.25s var(--ease-out-expo);
+    }
+    @media (min-width: 769px) {
+      .program-row:hover .program-arrow-circle svg {
+        opacity: 1;
+        transform: translateX(8px);
+      }
+    }
+
+    /* ----------------------------------------------------
+       5. Facilities Section
+       ---------------------------------------------------- */
+    #facilities {
+      position: relative;
+      z-index: 10;
+      background: var(--background);
+      border-radius: var(--radius-card-lg);
+      margin-top: -2.5rem; /* overlaps programs */
+      padding: 4rem 1.5rem 5rem;
+    }
+    @media (min-width: 640px) {
+      #facilities {
+        padding: 4rem 2.5rem 5rem;
+      }
+    }
+    .facilities-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      align-items: flex-end;
+      gap: 2.5rem;
+    }
+    @media (min-width: 768px) {
+      .facilities-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    .facilities-intro-col {
+      max-width: 24rem;
+    }
+    .facilities-icon-img {
+      width: 4rem;
+      height: 4rem;
+      border-radius: var(--radius-card);
+      object-fit: cover;
+    }
+    #facilities-title {
+      font-size: 3rem;
+      font-weight: 500;
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+      margin-top: 1.5rem;
+      color: var(--ink);
+    }
+    .facilities-body {
+      font-size: 0.875rem;
+      color: var(--ink-soft);
+      max-width: 20rem;
+      margin-top: 1.5rem;
+      line-height: 1.6;
+    }
+    .body-word {
+      display: inline-block;
+      transform: translateY(18px);
+      opacity: 0;
+      transition: transform 0.7s var(--ease-out-quart), opacity 0.7s var(--ease-out-quart);
+      will-change: transform, opacity;
+    }
+    .body-word.revealed {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .facilities-cards-col {
+      display: flex;
+      align-items: flex-end;
+      gap: 1.25rem;
+    }
+    .court-card {
+      position: relative;
+      flex: 1;
+      aspect-ratio: 3/4;
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      background: var(--surface);
+      transform-origin: center center;
+      transition: transform 0.35s var(--ease-out-expo);
+    }
+    .court-card.staggered-baseline {
+      margin-bottom: 2rem;
+    }
+    @media (min-width: 769px) {
+      .court-card:hover {
+        transform: scale(1.03);
+      }
+    }
+    .court-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .court-caption {
+      position: absolute;
+      left: 0.75rem;
+      right: 0.75rem;
+      bottom: 0.75rem;
+      border-radius: var(--radius-xl);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      color: #ffffff;
+      padding: 0.75rem 1rem;
+    }
+    .court-caption.tone-clay {
+      background: rgba(15, 47, 99, 0.4);
+    }
+    .court-caption.tone-blue {
+      background: rgba(11, 110, 151, 0.55);
+    }
+    .court-name {
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+    .court-desc {
+      font-size: 0.65rem;
+      opacity: 0.85;
+      margin-top: 0.15rem;
+      line-height: 1.35;
+    }
+
+    /* ----------------------------------------------------
+       6. Stats Section
+       ---------------------------------------------------- */
+    #stats {
+      background: var(--brand-deep);
+      color: #ffffff;
+      border-radius: var(--radius-card-lg);
+      margin-top: 0.75rem;
+      padding: 5rem 1.5rem;
+    }
+    @media (min-width: 640px) {
+      #stats {
+        padding: 5rem 2.5rem;
+      }
+    }
+    #stats-title {
+      font-size: 3rem;
+      font-weight: 500;
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+      margin-top: 1rem;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      column-gap: 2rem;
+      row-gap: 3rem;
+      margin-top: 4rem;
+    }
+    @media (min-width: 1024px) {
+      .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+    .stat-cell {
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+      padding-top: 1.25rem;
+    }
+    .stat-val {
+      font-size: 3.75rem;
+      font-weight: 500;
+      line-height: 1;
+      letter-spacing: -0.02em;
+    }
+    @media (min-width: 640px) {
+      .stat-val {
+        font-size: 4.5rem;
+      }
+    }
+    .stat-label {
+      font-size: 0.875rem;
+      color: rgba(255, 255, 255, 0.65);
+      margin-top: 0.75rem;
+    }
+
+    /* ----------------------------------------------------
+       7. Testimonials Section
+       ---------------------------------------------------- */
+    #testimonials {
+      background: var(--background);
+      padding: 5rem 1.5rem;
+    }
+    @media (min-width: 640px) {
+      #testimonials {
+        padding: 6rem 2.5rem;
+      }
+    }
+    #testimonials-title {
+      font-size: 3rem;
+      font-weight: 500;
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+      margin-top: 1rem;
+      color: var(--ink);
+    }
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+      margin-top: 3.5rem;
+    }
+    @media (min-width: 768px) {
+      .testimonials-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    .testimonial-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+      border-radius: var(--radius-card);
+      background: var(--surface);
+      padding: 1.75rem;
+      transition: transform 0.3s var(--ease-out-expo);
+      will-change: transform;
+    }
+    @media (min-width: 769px) {
+      .testimonial-card:hover {
+        transform: translateY(-8px);
+      }
+    }
+    .quote-glyph {
+      font-size: 2.25rem;
+      font-family: Georgia, serif;
+      color: var(--brand);
+      line-height: 1;
+    }
+    .testimonial-quote {
+      font-size: 1.125rem;
+      line-height: 1.6;
+      color: var(--ink);
+      margin-top: 1rem;
+    }
+    .testimonial-author {
+      border-top: 1px solid var(--hairline);
+      padding-top: 1rem;
+      margin-top: 1.5rem;
+    }
+    .author-name {
+      font-weight: 500;
+      color: var(--ink);
+    }
+    .author-role {
+      font-size: 0.875rem;
+      color: var(--ink-soft);
+      margin-top: 0.2rem;
+    }
+
+    /* ----------------------------------------------------
+       8. Footer
+       ---------------------------------------------------- */
+    #contact {
+      background: var(--brand-deep);
+      color: #ffffff;
+      border-radius: var(--radius-card-lg);
+      margin-top: 0.75rem;
+      padding: 3.5rem 1.5rem;
+    }
+    @media (min-width: 640px) {
+      #contact {
+        padding: 4rem 2.5rem;
+      }
+    }
+    .footer-cta-band {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+      padding-bottom: 3.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+    @media (min-width: 640px) {
+      .footer-cta-band {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-end;
+      }
+    }
+    .footer-cta-title {
+      font-size: 3.75rem;
+      font-weight: 500;
+      line-height: 0.92;
+      letter-spacing: -0.02em;
+      margin-top: 1rem;
+    }
+    .footer-columns-grid {
+      padding: 3.5rem 0;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+    }
+    @media (min-width: 768px) {
+      .footer-columns-grid {
+        grid-template-columns: 1.4fr 1fr 1fr 1fr;
+      }
+    }
+    .footer-brand-col {
+      max-width: 20rem;
+    }
+    .footer-brand-title {
+      font-size: 1.125rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .footer-brand-title svg {
+      width: 1.25rem;
+      height: 1.25rem;
+    }
+    .footer-blurb {
+      font-size: 0.875rem;
+      color: rgba(255, 255, 255, 0.65);
+      margin-top: 1rem;
+      line-height: 1.6;
+    }
+    .footer-address {
+      font-style: normal;
+      font-size: 0.875rem;
+      color: rgba(255, 255, 255, 0.8);
+      margin-top: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+    .footer-address a {
+      color: rgba(255, 255, 255, 0.8);
+      transition: color 0.2s ease;
+    }
+    .footer-address a:hover {
+      color: #ffffff;
+    }
+    .footer-address-muted {
+      color: rgba(255, 255, 255, 0.55);
+    }
+    .footer-nav-col h3 {
+      font-size: 0.75rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: rgba(255, 255, 255, 0.5);
+      margin-bottom: 1rem;
+    }
+    .footer-nav-links {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      font-size: 0.875rem;
+      color: rgba(255, 255, 255, 0.8);
+    }
+    .footer-nav-links a {
+      transition: color 0.2s ease;
+    }
+    .footer-nav-links a:hover {
+      color: #ffffff;
+    }
+    .footer-bottom-bar {
+      border-top: 1px solid rgba(255, 255, 255, 0.15);
+      padding-top: 2rem;
+      font-size: 0.875rem;
+      color: rgba(255, 255, 255, 0.6);
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+    @media (min-width: 640px) {
+      .footer-bottom-bar {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+      }
+    }
+    .footer-meta-links {
+      display: flex;
+      gap: 1.25rem;
+    }
+    .footer-meta-links a {
+      transition: color 0.2s ease;
+    }
+    .footer-meta-links a:hover {
+      color: #ffffff;
+    }
+
+    /* ----------------------------------------------------
+       Contact / Registration Modal
+       ---------------------------------------------------- */
+    #contact-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 90;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding: 0.75rem;
+      pointer-events: none;
+      visibility: hidden;
+    }
+    @media (min-width: 640px) {
+      #contact-modal {
+        align-items: center;
+        padding: 1.5rem;
+      }
+    }
+    #contact-modal.modal-open {
+      pointer-events: auto;
+      visibility: visible;
+    }
+    .modal-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(15, 47, 99, 0.4);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    #contact-modal.modal-open .modal-backdrop {
+      opacity: 1;
+    }
+    .modal-panel {
+      position: relative;
+      width: 100%;
+      max-width: 32rem;
+      max-height: 92svh;
+      overflow-y: auto;
+      border-radius: var(--radius-card-lg);
+      background: var(--surface-card);
+      padding: 1.5rem;
+      color: var(--ink);
+      box-shadow: 0 25px 60px rgba(15, 47, 99, 0.3);
+      opacity: 0;
+      transform: translateY(28px) scale(0.96);
+      transition: opacity 0.35s var(--ease-out-expo), transform 0.35s var(--ease-out-expo);
+      z-index: 2;
+    }
+    @media (min-width: 640px) {
+      .modal-panel {
+        padding: 2rem;
+      }
+    }
+    #contact-modal.modal-open .modal-panel {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+    .modal-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .modal-close-btn {
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: var(--radius-pill);
+      background: var(--surface);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+    .modal-close-btn:hover {
+      background: var(--hairline);
+    }
+    .modal-close-btn svg {
+      width: 1.25rem;
+      height: 1.25rem;
+      transition: transform 0.25s var(--ease-out-expo);
+    }
+    @media (min-width: 769px) {
+      .modal-close-btn:hover svg {
+        transform: rotate(90deg);
+      }
+    }
+    .modal-title {
+      font-size: 2.25rem;
+      font-weight: 500;
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+      margin-top: 0.75rem;
+    }
+    @media (min-width: 640px) {
+      .modal-title {
+        font-size: 3rem;
+      }
+    }
+    .modal-form {
+      margin-top: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+    .form-section {
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+    }
+    .form-section-header {
+      padding-bottom: 0.35rem;
+      border-bottom: 1px solid var(--hairline);
+      margin-bottom: 0.15rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .form-section-title {
+      font-size: 0.75rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--ink);
+    }
+    .form-section-badge {
+      font-size: 0.6rem;
+      font-weight: 500;
+      padding: 0.15rem 0.5rem;
+      border-radius: var(--radius-pill);
+      background: var(--surface);
+      color: var(--brand);
+      letter-spacing: 0.04em;
+    }
+    .form-field-hint {
+      font-size: 0.65rem;
+      color: var(--ink-soft);
+      margin-top: 0.25rem;
+      line-height: 1.35;
+    }
+    .form-row-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.85rem;
+    }
+    @media (min-width: 640px) {
+      .form-row-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+    .form-label {
+      font-size: 0.75rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--ink);
+      margin-bottom: 0.35rem;
+    }
+    .form-input, .form-textarea, .form-select {
+      width: 100%;
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--hairline);
+      background: var(--background);
+      padding: 0.75rem 1rem;
+      font-size: 0.875rem;
+      color: var(--ink);
+      font-family: inherit;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .form-input:focus, .form-textarea:focus, .form-select:focus {
+      outline: none;
+      border-color: var(--brand-light);
+      box-shadow: 0 0 0 2px rgba(87, 144, 230, 0.3);
+    }
+    .modal-submit-btn {
+      border-radius: var(--radius-pill);
+      background: var(--ink);
+      color: #ffffff;
+      padding: 0.875rem 1.75rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s ease, opacity 0.2s ease;
+      margin-top: 0.5rem;
+    }
+    .modal-submit-btn:hover {
+      background: var(--brand-deep);
+    }
+    .modal-submit-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .member-profile-summary {
+      width: 100%;
+      background: var(--background);
+      border: 1px solid var(--hairline);
+      border-radius: var(--radius-xl);
+      padding: 1rem;
+      text-align: left;
+      margin-top: 0.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+    }
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 0.4rem;
+      border-bottom: 1px dashed var(--hairline);
+    }
+    .summary-row:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+    .summary-label {
+      color: var(--ink-soft);
+      font-weight: 400;
+    }
+    .summary-val {
+      color: var(--ink);
+      font-weight: 500;
+    }
+    .summary-badge-active {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      color: #059669;
+      font-weight: 500;
+    }
+    .summary-badge-dot {
+      width: 0.375rem;
+      height: 0.375rem;
+      border-radius: var(--radius-pill);
+      background: #059669;
+    }
+
+    /* Success Panel */
+    .modal-success-panel {
+      margin-top: 2rem;
+      border-radius: var(--radius-card);
+      background: var(--surface);
+      padding: 1.5rem;
+      text-align: center;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .modal-success-panel.active {
+      display: flex;
+    }
+    .success-check-circle {
+      width: 3rem;
+      height: 3rem;
+      border-radius: var(--radius-pill);
+      background: var(--brand);
+      color: #ffffff;
+      display: grid;
+      place-items: center;
+    }
+    .success-check-circle svg {
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+    .success-title {
+      font-size: 1.125rem;
+      font-weight: 500;
+      color: var(--ink);
+    }
+    .success-desc {
+      font-size: 0.875rem;
+      color: var(--ink-soft);
+      line-height: 1.5;
+    }
+
+    /* ----------------------------------------------------
+       Fullscreen Menu Overlay
+       ---------------------------------------------------- */
+    #menu-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 70;
+      display: flex;
+      flex-direction: column;
+      pointer-events: none;
+      visibility: hidden;
+    }
+    #menu-overlay.menu-open {
+      pointer-events: auto;
+      visibility: visible;
+    }
+    .menu-backdrop {
+      position: absolute;
+      inset: 0;
+      background: var(--brand-deep);
+      opacity: 0;
+      transition: opacity 0.35s ease;
+    }
+    #menu-overlay.menu-open .menu-backdrop {
+      opacity: 1;
+    }
+    .menu-panel {
+      position: relative;
+      height: 100%;
+      padding: 0.5rem;
+      display: flex;
+      flex-direction: column;
+      opacity: 0;
+      transform: translateY(-24px);
+      transition: opacity 0.35s var(--ease-out-expo), transform 0.35s var(--ease-out-expo);
+      z-index: 2;
+    }
+    @media (min-width: 640px) {
+      .menu-panel {
+        padding: 0.75rem;
+      }
+    }
+    #menu-overlay.menu-open .menu-panel {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .menu-inner-container {
+      height: 100%;
+      border-radius: var(--radius-card-lg);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 1.5rem;
+      color: #ffffff;
+    }
+    @media (min-width: 640px) {
+      .menu-inner-container {
+        padding: 2rem 2.5rem;
+      }
+    }
+    .menu-top-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .menu-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 1rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+    }
+    .menu-brand svg {
+      width: 1.25rem;
+      height: 1.25rem;
+    }
+    .menu-close-btn {
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: var(--radius-pill);
+      background: rgba(255, 255, 255, 0.15);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+    .menu-close-btn:hover {
+      background: rgba(255, 255, 255, 0.25);
+    }
+    .menu-close-btn svg {
+      width: 1.25rem;
+      height: 1.25rem;
+      transition: transform 0.25s var(--ease-out-expo);
+    }
+    @media (min-width: 769px) {
+      .menu-close-btn:hover svg {
+        transform: rotate(90deg);
+      }
+    }
+    .menu-nav-links {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+    .menu-nav-item {
+      overflow: hidden;
+    }
+    .menu-link {
+      display: inline-block;
+      font-size: 3rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      color: #ffffff;
+      transform: translateY(28px);
+      opacity: 0;
+      transition: color 0.2s ease, transform 0.5s var(--ease-out-expo), opacity 0.5s var(--ease-out-expo);
+    }
+    @media (min-width: 640px) {
+      .menu-link {
+        font-size: 4.5rem;
+      }
+    }
+    #menu-overlay.menu-open .menu-link {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    .menu-link:hover {
+      color: var(--brand-light);
+    }
+    .menu-bottom-row {
+      border-top: 1px solid rgba(255, 255, 255, 0.15);
+      padding-top: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    @media (min-width: 640px) {
+      .menu-bottom-row {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+      }
+    }
+    .menu-social-links {
+      display: flex;
+      gap: 1.5rem;
+      font-size: 0.875rem;
+      color: rgba(255, 255, 255, 0.7);
+    }
+    .menu-social-links a {
+      transition: color 0.2s ease;
+    }
+    .menu-social-links a:hover {
+      color: #ffffff;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ====================================================
+       Intro Loader Curtain
+       ==================================================== -->
+  <div id="intro-loader" aria-hidden="true">
+    <div class="loader-wordmark" id="loader-wordmark">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M6 5v14M18 5v14M2 9v6M22 9v6M6 12h12"/>
+      </svg>
+      <span>Apex Athletic</span>
+    </div>
+    <div class="loader-progress-track">
+      <div class="loader-progress-fill" id="loader-progress-fill"></div>
+    </div>
+  </div>
+
+  <!-- ====================================================
+       Page Frame (<main>)
+       ==================================================== -->
+  <main>
+
+    <!-- 1 & 2. Hero Section -->
+    <section id="hero">
+      <!-- Parallax Background Plate -->
+      <div class="hero-parallax-plate">
+        <div class="hero-parallax-inner" id="hero-parallax-inner">
+          <img
+            src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=2000&q=80"
+            alt="Atmospheric high-performance gym training floor with barbell weights"
+            fetchpriority="high"
+            loading="eager"
+          />
+        </div>
+        <div class="hero-parallax-overlay"></div>
+      </div>
+
+      <!-- Header -->
+      <header class="hero-header">
+        <nav class="hero-nav-left" aria-label="Main Navigation">
+          <a href="#programs">Programs &amp; Trainers</a>
+          <a href="#facilities">Facility &amp; Recovery</a>
+        </nav>
+
+        <a href="#hero" class="hero-brand" aria-label="Apex Athletic Club Home">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 5v14M18 5v14M2 9v6M22 9v6M6 12h12"/>
+          </svg>
+          <span>Apex Athletic</span>
+        </a>
+
+        <div class="hero-nav-right">
+          <button type="button" class="btn-book-header" data-open-modal>
+            Register Now
+          </button>
+          <button type="button" class="burger-btn" id="burger-btn" aria-label="Open menu">
+            <span class="burger-bar"></span>
+            <span class="burger-bar"></span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Giant Title -->
+      <div class="hero-title-block">
+        <h1 id="hero-title">
+          <span class="word-clip"><span class="word-inner hero-title-word">Own</span></span>
+          <span class="word-clip"><span class="word-inner hero-title-word">The</span></span>
+          <span class="word-clip"><span class="word-inner hero-title-word">Floor</span></span>
+        </h1>
+      </div>
+
+      <!-- Bottom Row -->
+      <div class="hero-bottom-row">
+        <div class="hero-tagline">
+          <p>
+            <span class="stacked-line-clip"><span class="stacked-line-inner hero-tagline-line">Show Up,</span></span>
+            <span class="stacked-line-clip"><span class="stacked-line-inner hero-tagline-line">Level Up</span></span>
+          </p>
+        </div>
+
+        <div class="hero-right-cluster">
+          <!-- Collection Slider -->
+          <div class="hero-collection-slider inview-node" id="hero-collection-slider" data-delay="650">
+            <div class="collection-card-wrapper" id="collection-cards-wrapper">
+              <!-- Slide 1 -->
+              <article class="collection-card active" data-index="0">
+                <img
+                  src="https://images.unsplash.com/photo-1584735935682-2f2b69dff9d2?auto=format&fit=crop&w=600&q=80"
+                  alt="Calibrated steel plates and barbells"
+                  class="collection-thumb"
+                  loading="lazy"
+                />
+                <div class="collection-info">
+                  <span class="collection-brand">Apex Pro</span>
+                  <span class="collection-title">Calibrated Gear</span>
+                  <a href="#shop" class="collection-cta">Shop equipment &rarr;</a>
+                </div>
+              </article>
+              <!-- Slide 2 -->
+              <article class="collection-card" data-index="1">
+                <img
+                  src="https://images.unsplash.com/photo-1540497077202-7c8a3999166f?auto=format&fit=crop&w=600&q=80"
+                  alt="Modern cold plunge and recovery suite"
+                  class="collection-thumb"
+                  loading="lazy"
+                />
+                <div class="collection-info">
+                  <span class="collection-brand">Recovery Lab</span>
+                  <span class="collection-title">Cold &amp; Contrast</span>
+                  <a href="#facilities" class="collection-cta">Explore recovery &rarr;</a>
+                </div>
+              </article>
+              <!-- Slide 3 -->
+              <article class="collection-card" data-index="2">
+                <img
+                  src="https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=600&q=80"
+                  alt="Athlete chalking hands before lifting"
+                  class="collection-thumb"
+                  loading="lazy"
+                />
+                <div class="collection-info">
+                  <span class="collection-brand">Athletic Kit</span>
+                  <span class="collection-title">Performance Drop</span>
+                  <a href="#shop" class="collection-cta">Browse collection &rarr;</a>
+                </div>
+              </article>
+            </div>
+            <!-- Slider Dots -->
+            <div class="carousel-dots tone-light" id="hero-collection-dots">
+              <button type="button" class="dot-btn" aria-label="Slide 1" aria-current="true" data-slide="0"><span class="dot-pill"></span></button>
+              <button type="button" class="dot-btn" aria-label="Slide 2" aria-current="false" data-slide="1"><span class="dot-pill"></span></button>
+              <button type="button" class="dot-btn" aria-label="Slide 3" aria-current="false" data-slide="2"><span class="dot-pill"></span></button>
+            </div>
+          </div>
+
+          <!-- Membership Card -->
+          <article class="hero-membership-card inview-node" id="hero-membership-card" data-delay="780">
+            <div class="membership-col-left">
+              <span class="membership-value">12K+</span>
+              <div class="membership-avatars-row">
+                <div class="membership-avatar" style="background:#5790e6;"></div>
+                <div class="membership-avatar" style="background:#c2e029;"></div>
+                <div class="membership-avatar" style="background:#0b6e97;"></div>
+                <div class="membership-avatar" style="background:#ffffff;"></div>
+              </div>
+              <span class="membership-caption">Athletes on floor</span>
+            </div>
+            <img
+              src="https://images.unsplash.com/photo-1574680096145-d05b474e2155?auto=format&fit=crop&w=600&q=80"
+              alt="Athlete performing kettlebell conditioning"
+              class="membership-thumb"
+              loading="lazy"
+            />
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. Trust Section -->
+    <section id="trust">
+      <!-- Top Badges Row -->
+      <div class="trust-badges-row">
+        <div class="percentage-badge inview-scale">
+          <span class="val">100%</span>
+          <span class="desc">Coaching built around your goals</span>
+        </div>
+
+        <article class="trust-badge-card inview-node" data-delay="120">
+          <span class="trust-index-chip">#01</span>
+          <h3 class="trust-badge-title">Trusted by dedicated athletes</h3>
+          <p class="trust-badge-body">
+            From first-time lifters to competitive strength athletes, members train here because real progress is measured in every rep and recorded on the board.
+          </p>
+        </article>
+      </div>
+
+      <!-- Center Coach Card -->
+      <div class="coach-card-container inview-coach" id="coach-card-container">
+        <figure class="coach-card-figure">
+          <div class="coach-photo-wrapper" id="coach-photo-wrapper">
+            <img
+              id="coach-img"
+              src="https://images.unsplash.com/photo-1567013127542-490d757e51fc?auto=format&fit=crop&w=800&q=80"
+              alt="Head strength coach standing on lifting platform"
+              loading="lazy"
+            />
+          </div>
+          <figcaption class="coach-caption">
+            <div class="coach-name" id="coach-name">Marcus Vance</div>
+            <div class="coach-role" id="coach-role">Head Strength Coach</div>
+          </figcaption>
+        </figure>
+      </div>
+
+      <!-- Oversized Ghost Heading -->
+      <h2 id="trust-title">
+        <div class="ghost-row">
+          <div class="ghost-word-wrapper" id="ghost-w1-wrap">
+            <span class="ghost-word-inner ghost-color" id="ghost-w1">Expert</span>
+          </div>
+          <div class="ghost-word-wrapper" id="ghost-w2-wrap">
+            <span class="ghost-word-inner ghost-color" id="ghost-w2">Result-</span>
+          </div>
+        </div>
+        <div class="ghost-row">
+          <div class="ghost-word-wrapper" id="ghost-w3-wrap">
+            <span class="ghost-word-inner ink-color" id="ghost-w3">Driven</span>
+          </div>
+          <div class="ghost-word-wrapper" id="ghost-w4-wrap">
+            <span class="ghost-word-inner ghost-color" id="ghost-w4">Strength</span>
+          </div>
+        </div>
+      </h2>
+
+      <!-- Carousel Controls Row -->
+      <div class="trust-controls-row">
+        <button type="button" class="arrow-btn prev variant-outline" id="trust-prev-btn" aria-label="Previous trainer slide">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14M13 6l6 6-6 6"/>
+          </svg>
+        </button>
+
+        <div class="carousel-dots tone-dark" id="trust-dots">
+          <button type="button" class="dot-btn" aria-label="Trainer 1" aria-current="true" data-slide="0"><span class="dot-pill"></span></button>
+          <button type="button" class="dot-btn" aria-label="Trainer 2" aria-current="false" data-slide="1"><span class="dot-pill"></span></button>
+          <button type="button" class="dot-btn" aria-label="Trainer 3" aria-current="false" data-slide="2"><span class="dot-pill"></span></button>
+        </div>
+
+        <button type="button" class="arrow-btn variant-solid" id="trust-next-btn" aria-label="Next trainer slide">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14M13 6l6 6-6 6"/>
+          </svg>
+        </button>
+      </div>
+    </section>
+
+    <!-- 4. Programs Section -->
+    <section id="programs">
+      <div class="eyebrow tone-dark">
+        <span class="eyebrow-dot"></span>
+        <span>Training programs</span>
+      </div>
+
+      <h2 id="programs-title">
+        <span class="stacked-line-clip"><span class="stacked-line-inner">Built for</span></span>
+        <span class="stacked-line-clip"><span class="stacked-line-inner">every athlete</span></span>
+      </h2>
+
+      <ul class="programs-list">
+        <!-- Row 1 -->
+        <li>
+          <a href="#strength" class="program-row inview-node" data-delay="0">
+            <span class="program-index">01</span>
+            <div class="program-content">
+              <div class="program-name">Strength &amp; Conditioning</div>
+              <div class="program-desc">Progressive barbell training, compound lifts, and raw power development.</div>
+            </div>
+            <div class="program-arrow-circle">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14M13 6l6 6-6 6"/>
+              </svg>
+            </div>
+          </a>
+        </li>
+        <!-- Row 2 -->
+        <li>
+          <a href="#conditioning" class="program-row inview-node" data-delay="90">
+            <span class="program-index">02</span>
+            <div class="program-content">
+              <div class="program-name">High-Intensity Squad</div>
+              <div class="program-desc">Metabolic conditioning, functional turf circuits, and engine building.</div>
+            </div>
+            <div class="program-arrow-circle">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14M13 6l6 6-6 6"/>
+              </svg>
+            </div>
+          </a>
+        </li>
+        <!-- Row 3 -->
+        <li>
+          <a href="#olympic" class="program-row inview-node" data-delay="180">
+            <span class="program-index">03</span>
+            <div class="program-content">
+              <div class="program-name">Olympic Weightlifting</div>
+              <div class="program-desc">Technical precision for the snatch, clean &amp; jerk, and explosive pulling.</div>
+            </div>
+            <div class="program-arrow-circle">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14M13 6l6 6-6 6"/>
+              </svg>
+            </div>
+          </a>
+        </li>
+        <!-- Row 4 -->
+        <li>
+          <a href="#personal" class="program-row inview-node" data-delay="270">
+            <span class="program-index">04</span>
+            <div class="program-content">
+              <div class="program-name">1-on-1 Performance</div>
+              <div class="program-desc">Custom periodization, movement screening, and dedicated coach guidance.</div>
+            </div>
+            <div class="program-arrow-circle">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14M13 6l6 6-6 6"/>
+              </svg>
+            </div>
+          </a>
+        </li>
+      </ul>
+    </section>
+
+    <!-- 5. Facilities Section -->
+    <section id="facilities">
+      <div class="facilities-grid">
+        <!-- Intro Column -->
+        <div class="facilities-intro-col">
+          <img
+            src="https://images.unsplash.com/photo-1571902943202-507ec2618e8f?auto=format&fit=crop&w=600&q=80"
+            alt="Kettlebell and dumbbell rack in premium gym"
+            class="facilities-icon-img inview-scale"
+            loading="lazy"
+          />
+
+          <h2 id="facilities-title">
+            <span class="stacked-line-clip"><span class="stacked-line-inner">Tour Our</span></span>
+            <span class="stacked-line-clip"><span class="stacked-line-inner">World-Class</span></span>
+            <span class="stacked-line-clip"><span class="stacked-line-inner">Facility</span></span>
+          </h2>
+
+          <p class="facilities-body" id="facilities-body-text">
+            Reserve an orientation or book a training slot across our Olympic platforms, free-weight arena, and recovery suites — built for uncompromising performance.
+          </p>
+        </div>
+
+        <!-- Facility Cards -->
+        <div class="facilities-cards-col">
+          <!-- Card 1 -->
+          <figure class="court-card inview-node" data-delay="0">
+            <img
+              src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=1000&q=80"
+              alt="Main weightlifting arena with power cages and calibrated plates"
+              loading="lazy"
+            />
+            <figcaption class="court-caption tone-clay">
+              <div class="court-name">The Iron Arena</div>
+              <div class="court-desc">Custom Eleiko racks, calibrated steel plates, and dedicated deadlift platforms.</div>
+            </figcaption>
+          </figure>
+
+          <!-- Card 2 -->
+          <figure class="court-card staggered-baseline inview-node" data-delay="140">
+            <img
+              src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=1000&q=80"
+              alt="High-tech wellness recovery and contrast therapy studio"
+              loading="lazy"
+            />
+            <figcaption class="court-caption tone-blue">
+              <div class="court-name">The Recovery Lab</div>
+              <div class="court-desc">Contrast therapy suites featuring infrared saunas and 42&deg; cold plunges.</div>
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. Stats Section -->
+    <section id="stats">
+      <div class="eyebrow tone-light">
+        <span class="eyebrow-dot"></span>
+        <span>By the numbers</span>
+      </div>
+
+      <h2 id="stats-title">
+        <span class="stacked-line-clip"><span class="stacked-line-inner">A club that</span></span>
+        <span class="stacked-line-clip"><span class="stacked-line-inner">builds results</span></span>
+      </h2>
+
+      <dl class="stats-grid">
+        <!-- Stat 1 -->
+        <div class="stat-cell inview-node" data-delay="0">
+          <dt class="sr-only">Elite trainers</dt>
+          <dd>
+            <div class="stat-val">36</div>
+            <div class="stat-label">Elite trainers</div>
+          </dd>
+        </div>
+        <!-- Stat 2 -->
+        <div class="stat-cell inview-node" data-delay="110">
+          <dt class="sr-only">Sq ft training floor</dt>
+          <dd>
+            <div class="stat-val">40K</div>
+            <div class="stat-label">Sq ft training floor</div>
+          </dd>
+        </div>
+        <!-- Stat 3 -->
+        <div class="stat-cell inview-node" data-delay="220">
+          <dt class="sr-only">Active members</dt>
+          <dd>
+            <div class="stat-val">12K+</div>
+            <div class="stat-label">Active members</div>
+          </dd>
+        </div>
+        <!-- Stat 4 -->
+        <div class="stat-cell inview-node" data-delay="330">
+          <dt class="sr-only">Years setting the standard</dt>
+          <dd>
+            <div class="stat-val">15</div>
+            <div class="stat-label">Years setting the standard</div>
+          </dd>
+        </div>
+      </dl>
+    </section>
+
+    <!-- 7. Testimonials Section -->
+    <section id="testimonials">
+      <div class="eyebrow tone-dark">
+        <span class="eyebrow-dot"></span>
+        <span>What members say</span>
+      </div>
+
+      <h2 id="testimonials-title">
+        <span class="stacked-line-clip"><span class="stacked-line-inner">Loved by</span></span>
+        <span class="stacked-line-clip"><span class="stacked-line-inner">the weight room</span></span>
+      </h2>
+
+      <ul class="testimonials-grid">
+        <!-- Testimonial 1 -->
+        <li class="testimonial-card inview-node" data-delay="0">
+          <div>
+            <div class="quote-glyph" aria-hidden="true">&ldquo;</div>
+            <blockquote class="testimonial-quote">
+              I added 40 pounds to my deadlift in four months. The coaching attention and equipment standards are unmatched.
+            </blockquote>
+          </div>
+          <figcaption class="testimonial-author">
+            <div class="author-name">Marcus Reed</div>
+            <div class="author-role">Strength &amp; Conditioning</div>
+          </figcaption>
+        </li>
+        <!-- Testimonial 2 -->
+        <li class="testimonial-card inview-node" data-delay="120">
+          <div>
+            <div class="quote-glyph" aria-hidden="true">&ldquo;</div>
+            <blockquote class="testimonial-quote">
+              Best lifting facility in Petaling Jaya. Calibrated plates, zero crowds, and coaches who know human movement inside out.
+            </blockquote>
+          </div>
+          <figcaption class="testimonial-author">
+            <div class="author-name">Sophia Thorne</div>
+            <div class="author-role">Olympic Weightlifting</div>
+          </figcaption>
+        </li>
+        <!-- Testimonial 3 -->
+        <li class="testimonial-card inview-node" data-delay="240">
+          <div>
+            <div class="quote-glyph" aria-hidden="true">&ldquo;</div>
+            <blockquote class="testimonial-quote">
+              The combination of heavy lifting floors and recovery cold plunges transformed how I recover and train daily.
+            </blockquote>
+          </div>
+          <figcaption class="testimonial-author">
+            <div class="author-name">Julian Meyer</div>
+            <div class="author-role">Athletic Member</div>
+          </figcaption>
+        </li>
+      </ul>
+    </section>
+
+    <!-- 8. Footer -->
+    <footer id="contact">
+      <!-- CTA Band -->
+      <div class="footer-cta-band">
+        <div>
+          <div class="eyebrow tone-light">
+            <span class="eyebrow-dot"></span>
+            <span>Get started</span>
+          </div>
+          <p class="footer-cta-title">
+            <span class="stacked-line-clip"><span class="stacked-line-inner">Ready to</span></span>
+            <span class="stacked-line-clip"><span class="stacked-line-inner">train?</span></span>
+          </p>
+        </div>
+
+        <button type="button" class="pill-btn variant-light inview-node" data-delay="150" data-open-modal>
+          <span>Register Now</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14M13 6l6 6-6 6"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Columns Grid -->
+      <div class="footer-columns-grid">
+        <!-- Brand Column -->
+        <div class="footer-brand-col">
+          <div class="footer-brand-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 5v14M18 5v14M2 9v6M22 9v6M6 12h12"/>
+            </svg>
+            <span>Apex Athletic</span>
+          </div>
+          <p class="footer-blurb">
+            A private athletic club and high-performance gym where progressive coaching meets championship-grade equipment.
+          </p>
+          <address class="footer-address">
+            <a href="mailto:join@apexathletic.club">join@apexathletic.club</a>
+            <a href="tel:+60379550199">+60 (3) 7955-0199</a>
+            <span class="footer-address-muted">Seksyen 13, 46200 Petaling Jaya, Selangor, Malaysia</span>
+          </address>
+        </div>
+
+        <!-- Col 1: Programs -->
+        <nav class="footer-nav-col" aria-label="Programs">
+          <h3>Programs</h3>
+          <ul class="footer-nav-links">
+            <li><a href="#strength">Strength &amp; Conditioning</a></li>
+            <li><a href="#conditioning">High-Intensity Squad</a></li>
+            <li><a href="#olympic">Olympic Weightlifting</a></li>
+            <li><a href="#personal">1-on-1 Performance</a></li>
+          </ul>
+        </nav>
+
+        <!-- Col 2: Club -->
+        <nav class="footer-nav-col" aria-label="Club">
+          <h3>Club</h3>
+          <ul class="footer-nav-links">
+            <li><a href="#membership">Memberships</a></li>
+            <li><a href="#facilities">Facilities</a></li>
+            <li><a href="#recovery">Recovery Lab</a></li>
+            <li><a href="#shop">Pro Shop</a></li>
+          </ul>
+        </nav>
+
+        <!-- Col 3: Company -->
+        <nav class="footer-nav-col" aria-label="Company">
+          <h3>Company</h3>
+          <ul class="footer-nav-links">
+            <li><a href="#about">About Us</a></li>
+            <li><a href="#programs">Master Trainers</a></li>
+            <li><a href="#careers">Careers</a></li>
+            <li><a href="#contact">Contact &amp; Tours</a></li>
+          </ul>
+        </nav>
+      </div>
+
+      <!-- Bottom Bar -->
+      <div class="footer-bottom-bar">
+        <div>&copy; 2026 Apex Athletic Club. All rights reserved.</div>
+        <nav class="footer-meta-links" aria-label="Social Links">
+          <a href="#instagram">Instagram</a>
+          <a href="#x">X</a>
+          <a href="#youtube">YouTube</a>
+          <a href="#linkedin">LinkedIn</a>
+        </nav>
+        <nav class="footer-meta-links" aria-label="Legal Links">
+          <a href="#privacy">Privacy</a>
+          <a href="#terms">Terms</a>
+        </nav>
+      </div>
+    </footer>
+
+  </main>
+
+  <!-- ====================================================
+       Contact / Registration Modal
+       ==================================================== -->
+  <div id="contact-modal" role="dialog" aria-modal="true" aria-labelledby="modal-heading-title">
+    <div class="modal-backdrop" id="modal-backdrop"></div>
+    <div class="modal-panel" id="modal-panel">
+      <!-- Header -->
+      <div class="modal-header-row">
+        <div class="eyebrow tone-dark">
+          <span class="eyebrow-dot"></span>
+          <span>Gym Registration</span>
+        </div>
+        <button type="button" class="modal-close-btn" id="modal-close-btn" aria-label="Close modal">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 6l12 12M18 6L6 18"/>
+          </svg>
+        </button>
+      </div>
+
+      <h2 class="modal-title" id="modal-heading-title">
+        <span class="stacked-line-clip"><span class="stacked-line-inner modal-title-line">Claim your</span></span>
+        <span class="stacked-line-clip"><span class="stacked-line-inner modal-title-line">membership</span></span>
+      </h2>
+
+      <!-- Form -->
+      <form class="modal-form" id="contact-form" novalidate>
+        <!-- 1. Core Profile Information -->
+        <div class="form-section">
+          <div class="form-section-header">
+            <span class="form-section-title">1. Core Profile Information</span>
+            <span class="form-section-badge">Personal Details</span>
+          </div>
+
+          <div class="form-group">
+            <label for="contact-name" class="form-label">Full Name</label>
+            <input
+              type="text"
+              id="contact-name"
+              name="name"
+              class="form-input"
+              placeholder="e.g., Amir Osman, Hafiz Lim"
+              required
+            />
+            <div class="form-field-hint">Required to identify the member uniquely in the database table and dropdown selectors.</div>
+          </div>
+
+          <div class="form-group">
+            <label for="contact-email" class="form-label">Email Address</label>
+            <input
+              type="email"
+              id="contact-email"
+              name="email"
+              class="form-input"
+              placeholder="e.g., amir.osman@email.com"
+              required
+            />
+            <div class="form-field-hint">Used for communication and unique member identification.</div>
+          </div>
+
+          <div class="form-group">
+            <label for="contact-phone" class="form-label">Phone Number / WhatsApp</label>
+            <input
+              type="tel"
+              id="contact-phone"
+              name="phone"
+              class="form-input"
+              placeholder="e.g., +60 12-345 6789"
+              required
+            />
+            <div class="form-field-hint">Essential for automated retention workflows (e.g., WhatsApp alerts triggered when member hits high risk).</div>
+          </div>
+        </div>
+
+        <!-- 2. Membership & Billing Details (Used by the ML Model) -->
+        <div class="form-section">
+          <div class="form-section-header">
+            <span class="form-section-title">2. Membership &amp; Billing Details</span>
+            <span class="form-section-badge">Used by ML Model</span>
+          </div>
+
+          <div class="form-row-grid">
+            <div class="form-group">
+              <label for="contact-tier" class="form-label">Membership Tier</label>
+              <select id="contact-tier" name="tier" class="form-select" required>
+                <option value="Annual" selected>Annual</option>
+                <option value="Monthly">Monthly</option>
+                <option value="Quarterly">Quarterly</option>
+                <option value="Premium">Premium</option>
+              </select>
+              <div class="form-field-hint">Corresponds to features like Membership Tier Annual in Gradient Boosting churn model.</div>
+            </div>
+
+            <div class="form-group">
+              <label for="contact-payment" class="form-label">Payment Method</label>
+              <select id="contact-payment" name="payment_method" class="form-select" required>
+                <option value="Online Banking" selected>Online Banking</option>
+                <option value="Credit Card">Credit Card</option>
+                <option value="E-Wallet">E-Wallet</option>
+              </select>
+              <div class="form-field-hint">Matches payment features tracked in model's feature importance weights.</div>
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" class="modal-submit-btn" id="contact-submit-btn">
+          Complete Registration
+        </button>
+      </form>
+
+      <!-- Success State -->
+      <div class="modal-success-panel" id="modal-success-panel">
+        <div class="success-check-circle">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 13l4 4L19 7"/>
+          </svg>
+        </div>
+        <div class="success-title">Member Registration Synced</div>
+        <p class="success-desc" id="success-message-text">
+          Member details successfully stored and synced with retention workflow.
+        </p>
+
+        <!-- Member Profile Summary -->
+        <div class="member-profile-summary" id="member-profile-summary">
+          <div class="summary-row">
+            <span class="summary-label">Full Name:</span>
+            <span class="summary-val" id="summary-name">—</span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-label">Email Address:</span>
+            <span class="summary-val" id="summary-email">—</span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-label">Phone / WhatsApp:</span>
+            <span class="summary-val" id="summary-phone">—</span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-label">Membership Tier:</span>
+            <span class="summary-val" id="summary-tier">—</span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-label">Payment Method:</span>
+            <span class="summary-val" id="summary-payment">—</span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-label">Automated Retention:</span>
+            <span class="summary-badge-active">
+              <span class="summary-badge-dot"></span>
+              WhatsApp High-Risk Alerts Active
+            </span>
+          </div>
+        </div>
+
+        <button type="button" class="pill-btn variant-solid" id="success-done-btn" style="margin-top: 0.75rem;">
+          Done
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====================================================
+       Fullscreen Menu Overlay
+       ==================================================== -->
+  <div id="menu-overlay" role="dialog" aria-modal="true" aria-label="Main Navigation Menu">
+    <div class="menu-backdrop" id="menu-backdrop"></div>
+    <div class="menu-panel" id="menu-panel">
+      <div class="menu-inner-container">
+        <!-- Top Row -->
+        <div class="menu-top-row">
+          <div class="menu-brand">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 5v14M18 5v14M2 9v6M22 9v6M6 12h12"/>
+            </svg>
+            <span>Apex Athletic</span>
+          </div>
+
+          <button type="button" class="menu-close-btn" id="menu-close-btn" aria-label="Close menu">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 6l12 12M18 6L6 18"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Center Nav -->
+        <nav class="menu-nav-links" aria-label="Menu Links">
+          <div class="menu-nav-item">
+            <a href="#programs" class="menu-link" data-index="0">Programs</a>
+          </div>
+          <div class="menu-nav-item">
+            <a href="#facilities" class="menu-link" data-index="1">Facilities</a>
+          </div>
+          <div class="menu-nav-item">
+            <a href="#testimonials" class="menu-link" data-index="2">Reviews</a>
+          </div>
+          <div class="menu-nav-item">
+            <a href="#contact" class="menu-link" data-index="3">Contact</a>
+          </div>
+        </nav>
+
+        <!-- Bottom Row -->
+        <div class="menu-bottom-row">
+          <button type="button" class="pill-btn variant-light" id="menu-book-btn">
+            <span>Register Now</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14M13 6l6 6-6 6"/>
+            </svg>
+          </button>
+
+          <nav class="menu-social-links" aria-label="Social Links">
+            <a href="#instagram">Instagram</a>
+            <a href="#x">X</a>
+            <a href="#youtube">YouTube</a>
+            <a href="#linkedin">LinkedIn</a>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====================================================
+       Application Script (ES Module)
+       ==================================================== -->
+  <script type="module">
+    import Lenis from 'lenis';
+
+    /* ----------------------------------------------------
+       Adaptive Rem Grid (Scale Up > 1920px)
+       ---------------------------------------------------- */
+    const FONT_BASE = 16, BASE_W = 1920, COEF = 0.6666;
+    function updateAdaptiveRem() {
+      const reduction = ((BASE_W - window.innerWidth) / BASE_W) * 100 * COEF;
+      const size = FONT_BASE - (FONT_BASE * reduction) / 100;
+      if (size > FONT_BASE) {
+        document.documentElement.style.fontSize = size + "px";
+      } else {
+        document.documentElement.style.removeProperty("font-size");
+      }
+    }
+    window.addEventListener("resize", updateAdaptiveRem);
+    updateAdaptiveRem();
+
+    /* ----------------------------------------------------
+       Lenis Smooth Scroll & Scroll Lock
+       ---------------------------------------------------- */
+    const lenis = new Lenis({ smoothWheel: true });
+    let isScrollLocked = false;
+
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
+
+    function lockScroll() {
+      isScrollLocked = true;
+      lenis.stop();
+      document.documentElement.style.position = 'relative';
+      document.documentElement.style.overflow = 'hidden';
+      document.documentElement.style.height = '100%';
+    }
+
+    function unlockScroll() {
+      isScrollLocked = false;
+      lenis.start();
+      document.documentElement.style.removeProperty('position');
+      document.documentElement.style.removeProperty('overflow');
+      document.documentElement.style.removeProperty('height');
+    }
+
+    // Scroll to top on first load
+    window.scrollTo(0, 0);
+
+    /* ----------------------------------------------------
+       Tiny Spring Engine Helper
+       Critically-tunable spring model:
+       v += (-tension*(x - target) - friction*v) * dt; x += v * dt
+       ---------------------------------------------------- */
+    class Spring {
+      constructor(val, config = { tension: 170, friction: 26 }, onUpdate) {
+        this.current = val;
+        this.target = val;
+        this.velocity = 0;
+        this.tension = config.tension;
+        this.friction = config.friction;
+        this.onUpdate = onUpdate;
+        this.animating = false;
+      }
+      setTarget(target, immediate = false) {
+        this.target = target;
+        if (immediate) {
+          this.current = target;
+          this.velocity = 0;
+          this.animating = false;
+          if (this.onUpdate) this.onUpdate(this.current);
+          return;
+        }
+        if (!this.animating) {
+          this.animating = true;
+          activeSprings.add(this);
+        }
+      }
+      step(dt) {
+        const subSteps = 3;
+        const subDt = dt / subSteps;
+        for (let i = 0; i < subSteps; i++) {
+          const force = -this.tension * (this.current - this.target) - this.friction * this.velocity;
+          this.velocity += force * subDt;
+          this.current += this.velocity * subDt;
+        }
+        if (Math.abs(this.current - this.target) < 0.0005 && Math.abs(this.velocity) < 0.0005) {
+          this.current = this.target;
+          this.velocity = 0;
+          this.animating = false;
+          if (this.onUpdate) this.onUpdate(this.current);
+          return false;
+        }
+        if (this.onUpdate) this.onUpdate(this.current);
+        return true;
+      }
+    }
+
+    const activeSprings = new Set();
+    let lastTime = performance.now();
+    function springLoop(now) {
+      const dt = Math.min((now - lastTime) / 1000, 0.064);
+      lastTime = now;
+      for (const spring of activeSprings) {
+        const running = spring.step(dt);
+        if (!running) {
+          activeSprings.delete(spring);
+        }
+      }
+      requestAnimationFrame(springLoop);
+    }
+    requestAnimationFrame(springLoop);
+
+    /* ----------------------------------------------------
+       Intro Loader & Hero Reveal Gate
+       MIN_VISIBLE_MS = 1400, MAX_VISIBLE_MS = 2600, EXIT_MS = 850
+       ---------------------------------------------------- */
+    const MIN_VISIBLE_MS = 1400;
+    const MAX_VISIBLE_MS = 2600;
+    const EXIT_MS = 850;
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const loaderEl = document.getElementById('intro-loader');
+    const loaderWordmark = document.getElementById('loader-wordmark');
+    const loaderFill = document.getElementById('loader-progress-fill');
+
+    let loaderReady = false;
+
+    // Lock scroll on start
+    lockScroll();
+
+    // Wordmark entrance
+    setTimeout(() => {
+      loaderWordmark.classList.add('revealed');
+    }, 60);
+
+    // Fill progress
+    setTimeout(() => {
+      loaderFill.classList.add('fill-active');
+    }, 120);
+
+    const startTime = performance.now();
+
+    function triggerLoaderExit() {
+      if (loaderReady) return;
+      loaderReady = true;
+
+      if (prefersReducedMotion) {
+        loaderEl.style.display = 'none';
+        unlockScroll();
+        triggerHeroReveals();
+        return;
+      }
+
+      // Slide up curtain
+      loaderEl.classList.add('loader-exit');
+      unlockScroll();
+      triggerHeroReveals();
+
+      setTimeout(() => {
+        loaderEl.remove();
+      }, EXIT_MS);
+    }
+
+    function checkReadyToExit() {
+      const elapsed = performance.now() - startTime;
+      const minWait = prefersReducedMotion ? 200 : MIN_VISIBLE_MS;
+      const remaining = Math.max(0, minWait - elapsed);
+      setTimeout(triggerLoaderExit, remaining);
+    }
+
+    if (document.readyState === 'complete') {
+      checkReadyToExit();
+    } else {
+      window.addEventListener('load', () => {
+        checkReadyToExit();
+      });
+      // Safety timeout
+      setTimeout(() => {
+        if (!loaderReady) triggerLoaderExit();
+      }, prefersReducedMotion ? 400 : MAX_VISIBLE_MS);
+    }
+
+    /* ----------------------------------------------------
+       Hero Reveal Orchestration
+       ---------------------------------------------------- */
+    function triggerHeroReveals() {
+      // 1. Title words
+      const titleWords = document.querySelectorAll('.hero-title-word');
+      titleWords.forEach((word, i) => {
+        setTimeout(() => {
+          word.classList.add('revealed');
+        }, i * 140);
+      });
+
+      // 2. Tagline lines
+      const taglineLines = document.querySelectorAll('.hero-tagline-line');
+      taglineLines.forEach((line, i) => {
+        setTimeout(() => {
+          line.classList.add('revealed');
+        }, 350 + i * 110);
+      });
+
+      // 3. Collection slider inview rise
+      const colSlider = document.getElementById('hero-collection-slider');
+      if (colSlider) {
+        const sliderSpring = new Spring(28, { tension: 200, friction: 26 }, (y) => {
+          const progress = 1 - Math.max(0, y / 28);
+          colSlider.style.transform = `translateY(${y}px)`;
+          colSlider.style.opacity = progress.toFixed(3);
+        });
+        setTimeout(() => {
+          sliderSpring.setTarget(0);
+          startCollectionAutoplay();
+        }, 650);
+      }
+
+      // 4. Membership card inview rise
+      const memCard = document.getElementById('hero-membership-card');
+      if (memCard) {
+        const memSpring = new Spring(28, { tension: 200, friction: 26 }, (y) => {
+          const progress = 1 - Math.max(0, y / 28);
+          memCard.style.transform = `translateY(${y}px)`;
+          memCard.style.opacity = progress.toFixed(3);
+        });
+        setTimeout(() => {
+          memSpring.setTarget(0);
+        }, 780);
+      }
+    }
+
+    /* ----------------------------------------------------
+       Hero Collection Slider (Autoplay & Dots)
+       ---------------------------------------------------- */
+    let collectionIndex = 0;
+    let collectionTimer = null;
+    const collectionCards = document.querySelectorAll('#collection-cards-wrapper .collection-card');
+    const collectionDots = document.querySelectorAll('#hero-collection-dots .dot-btn');
+
+    function setCollectionSlide(idx) {
+      if (idx === collectionIndex) return;
+      collectionCards.forEach((c) => c.classList.remove('active'));
+      collectionDots.forEach((d) => d.setAttribute('aria-current', 'false'));
+
+      collectionIndex = idx;
+      collectionCards[collectionIndex].classList.add('active');
+      collectionDots[collectionIndex].setAttribute('aria-current', 'true');
+    }
+
+    function nextCollectionSlide() {
+      const next = (collectionIndex + 1) % collectionCards.length;
+      setCollectionSlide(next);
+    }
+
+    function startCollectionAutoplay() {
+      if (collectionTimer) clearInterval(collectionTimer);
+      collectionTimer = setInterval(nextCollectionSlide, 3800);
+    }
+
+    collectionDots.forEach((dot) => {
+      dot.addEventListener('click', () => {
+        const targetIdx = parseInt(dot.getAttribute('data-slide'), 10);
+        setCollectionSlide(targetIdx);
+        startCollectionAutoplay();
+      });
+    });
+
+    /* ----------------------------------------------------
+       Hero Parallax Plate on Scroll
+       ---------------------------------------------------- */
+    const heroSection = document.getElementById('hero');
+    const heroParallaxInner = document.getElementById('hero-parallax-inner');
+
+    function updateHeroParallax() {
+      if (!heroSection || !heroParallaxInner) return;
+      const rect = heroSection.getBoundingClientRect();
+      const heroH = heroSection.offsetHeight;
+      if (rect.bottom < 0 || rect.top > window.innerHeight) return;
+      const progress = Math.max(0, Math.min(1, -rect.top / heroH));
+      const translateY = (progress * 12).toFixed(2);
+      heroParallaxInner.style.transform = `translateY(${translateY}%)`;
+    }
+
+    /* ----------------------------------------------------
+       3. Trust Section Carousel (Coach & Ghost Words)
+       ---------------------------------------------------- */
+    const trustSlides = [
+      {
+        image: 'https://images.unsplash.com/photo-1567013127542-490d757e51fc?auto=format&fit=crop&w=800&q=80',
+        name: 'Marcus Vance',
+        role: 'Head Strength Coach',
+        alt: 'Head strength coach standing on lifting platform',
+        words: ['Expert', 'Result-', 'Driven', 'Strength']
+      },
+      {
+        image: 'https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=800&q=80',
+        name: 'Elena Rostova',
+        role: 'Performance & Mobility Lead',
+        alt: 'Performance coach demonstrating athletic movement',
+        words: ['Sharper', 'Faster', 'Stronger', 'Everyday']
+      },
+      {
+        image: 'https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?auto=format&fit=crop&w=800&q=80',
+        name: 'David Chen',
+        role: 'Olympic Lifting Director',
+        alt: 'Olympic lifting director ready on training turf',
+        words: ['Pure', 'Power', 'Starts', 'Here']
+      }
+    ];
+
+    let trustIndex = 0;
+    const coachImg = document.getElementById('coach-img');
+    const coachName = document.getElementById('coach-name');
+    const coachRole = document.getElementById('coach-role');
+    const coachPhotoWrap = document.getElementById('coach-photo-wrapper');
+    const trustDots = document.querySelectorAll('#trust-dots .dot-btn');
+    const trustPrevBtn = document.getElementById('trust-prev-btn');
+    const trustNextBtn = document.getElementById('trust-next-btn');
+
+    const ghostW1 = document.getElementById('ghost-w1');
+    const ghostW2 = document.getElementById('ghost-w2');
+    const ghostW3 = document.getElementById('ghost-w3');
+    const ghostW4 = document.getElementById('ghost-w4');
+    const ghostElements = [ghostW1, ghostW2, ghostW3, ghostW4];
+
+    function renderTrustSlide(index) {
+      trustIndex = index;
+      const data = trustSlides[trustIndex];
+
+      // Update dots
+      trustDots.forEach((d) => d.setAttribute('aria-current', 'false'));
+      trustDots[trustIndex].setAttribute('aria-current', 'true');
+
+      // Cross-fade coach photo
+      coachPhotoWrap.style.opacity = '0';
+      setTimeout(() => {
+        coachImg.src = data.image;
+        coachImg.alt = data.alt;
+        coachName.textContent = data.name;
+        coachRole.textContent = data.role;
+        coachPhotoWrap.style.opacity = '1';
+      }, 180);
+
+      // Re-trigger ghost word slide-up reveals
+      ghostElements.forEach((el, i) => {
+        el.classList.remove('revealed');
+        el.textContent = data.words[i];
+      });
+
+      // Force reflow and reveal
+      void ghostW1.offsetWidth;
+      setTimeout(() => {
+        ghostElements.forEach((el) => el.classList.add('revealed'));
+      }, 40);
+    }
+
+    trustPrevBtn.addEventListener('click', () => {
+      const prev = (trustIndex - 1 + trustSlides.length) % trustSlides.length;
+      renderTrustSlide(prev);
+    });
+
+    trustNextBtn.addEventListener('click', () => {
+      const next = (trustIndex + 1) % trustSlides.length;
+      renderTrustSlide(next);
+    });
+
+    trustDots.forEach((dot) => {
+      dot.addEventListener('click', () => {
+        const idx = parseInt(dot.getAttribute('data-slide'), 10);
+        renderTrustSlide(idx);
+      });
+    });
+
+    /* Trust Ghost Words Opposing Scroll Parallax */
+    const trustSection = document.getElementById('trust');
+    const ghostW1Wrap = document.getElementById('ghost-w1-wrap');
+    const ghostW2Wrap = document.getElementById('ghost-w2-wrap');
+    const ghostW3Wrap = document.getElementById('ghost-w3-wrap');
+    const ghostW4Wrap = document.getElementById('ghost-w4-wrap');
+
+    function updateTrustParallax() {
+      if (!trustSection) return;
+      const rect = trustSection.getBoundingClientRect();
+      const wh = window.innerHeight;
+      if (rect.bottom < 0 || rect.top > wh) return;
+      const progress = Math.max(0, Math.min(1, (wh - rect.top) / (wh + rect.height)));
+
+      const p1 = (-3 + progress * 6).toFixed(2);
+      const p2 = (3 - progress * 6).toFixed(2);
+      const p3 = (-2 + progress * 6).toFixed(2);
+      const p4 = (4 - progress * 7).toFixed(2);
+
+      if (ghostW1Wrap) ghostW1Wrap.style.transform = `translateX(${p1}%)`;
+      if (ghostW2Wrap) ghostW2Wrap.style.transform = `translateX(${p2}%)`;
+      if (ghostW3Wrap) ghostW3Wrap.style.transform = `translateX(${p3}%)`;
+      if (ghostW4Wrap) ghostW4Wrap.style.transform = `translateX(${p4}%)`;
+    }
+
+    // Initial ghost word reveal when trust enters
+    let trustObserved = false;
+    const trustObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !trustObserved) {
+            trustObserved = true;
+            ghostElements.forEach((el) => el.classList.add('revealed'));
+          }
+        });
+      },
+      { threshold: 0.15 }
+    );
+    if (trustSection) trustObserver.observe(trustSection);
+
+    /* ----------------------------------------------------
+       Facilities Section Word-by-Word Reveal
+       ---------------------------------------------------- */
+    const facilitiesBody = document.getElementById('facilities-body-text');
+    if (facilitiesBody) {
+      const text = facilitiesBody.textContent.trim();
+      const words = text.split(/\s+/);
+      facilitiesBody.innerHTML = words
+        .map((w) => `<span class="body-word">${w}</span>`)
+        .join(' ');
+    }
+
+    /* ----------------------------------------------------
+       Generic IntersectionObserver for Inview Animations
+       ---------------------------------------------------- */
+    const inviewObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const target = entry.target;
+          inviewObserver.unobserve(target);
+
+          const delay = parseInt(target.getAttribute('data-delay') || '0', 10);
+
+          // 1. Stacked lines
+          const lines = target.querySelectorAll('.stacked-line-inner');
+          if (lines.length > 0) {
+            lines.forEach((line, i) => {
+              setTimeout(() => {
+                line.classList.add('revealed');
+              }, delay + i * 120);
+            });
+          }
+
+          // 2. Facilities body words
+          const bodyWords = target.querySelectorAll('.body-word');
+          if (bodyWords.length > 0) {
+            bodyWords.forEach((word, i) => {
+              setTimeout(() => {
+                word.classList.add('revealed');
+              }, 250 + i * 28);
+            });
+          }
+
+          // 3. Generic Inview Node (spring rise)
+          if (target.classList.contains('inview-node')) {
+            const startY = 32;
+            const spring = new Spring(startY, { tension: 180, friction: 24 }, (y) => {
+              const progress = 1 - Math.max(0, y / startY);
+              target.style.transform = `translateY(${y}px)`;
+              target.style.opacity = progress.toFixed(3);
+            });
+            setTimeout(() => {
+              spring.setTarget(0);
+            }, delay);
+          }
+
+          // 4. Inview Scale (percent badge / facilities icon)
+          if (target.classList.contains('inview-scale')) {
+            const spring = new Spring(0.88, { tension: 220, friction: 22 }, (s) => {
+              const opacity = Math.min(1, Math.max(0, (s - 0.88) / 0.12));
+              target.style.transform = `scale(${s})`;
+              target.style.opacity = opacity.toFixed(3);
+            });
+            setTimeout(() => {
+              spring.setTarget(1);
+            }, delay);
+          }
+
+          // 5. Inview Coach Figure
+          if (target.classList.contains('inview-coach')) {
+            const spring = new Spring(60, { tension: 170, friction: 26 }, (y) => {
+              const progress = 1 - Math.max(0, y / 60);
+              const scale = 0.92 + progress * 0.08;
+              if (window.innerWidth >= 640) {
+                target.style.transform = `translate(-50%, calc(-50% + ${y}px)) scale(${scale})`;
+              } else {
+                target.style.transform = `translateY(${y}px) scale(${scale})`;
+              }
+              target.style.opacity = progress.toFixed(3);
+            });
+            spring.setTarget(0);
+          }
+        });
+      },
+      { threshold: 0.12 }
+    );
+
+    // Observe all targets
+    document.querySelectorAll('.inview-node:not(#hero-collection-slider):not(#hero-membership-card)').forEach((el) => {
+      inviewObserver.observe(el);
+    });
+    document.querySelectorAll('.inview-scale').forEach((el) => {
+      inviewObserver.observe(el);
+    });
+    document.querySelectorAll('.inview-coach').forEach((el) => {
+      inviewObserver.observe(el);
+    });
+    document.querySelectorAll('h2, .facilities-intro-col, .footer-cta-band').forEach((el) => {
+      inviewObserver.observe(el);
+    });
+
+    /* ----------------------------------------------------
+       Parallax Scroll Hook (Combined)
+       ---------------------------------------------------- */
+    lenis.on('scroll', () => {
+      updateHeroParallax();
+      updateTrustParallax();
+    });
+
+    /* ----------------------------------------------------
+       Registration / Contact Modal Logic
+       ---------------------------------------------------- */
+    const contactModal = document.getElementById('contact-modal');
+    const modalBackdrop = document.getElementById('modal-backdrop');
+    const modalCloseBtn = document.getElementById('modal-close-btn');
+    const contactForm = document.getElementById('contact-form');
+    const contactNameInput = document.getElementById('contact-name');
+    const contactEmailInput = document.getElementById('contact-email');
+    const contactPhoneInput = document.getElementById('contact-phone');
+    const contactTierSelect = document.getElementById('contact-tier');
+    const contactPaymentSelect = document.getElementById('contact-payment');
+    const contactSubmitBtn = document.getElementById('contact-submit-btn');
+    const modalSuccessPanel = document.getElementById('modal-success-panel');
+    const successMsgText = document.getElementById('success-message-text');
+    const successDoneBtn = document.getElementById('success-done-btn');
+
+    const summaryName = document.getElementById('summary-name');
+    const summaryEmail = document.getElementById('summary-email');
+    const summaryPhone = document.getElementById('summary-phone');
+    const summaryTier = document.getElementById('summary-tier');
+    const summaryPayment = document.getElementById('summary-payment');
+
+    let modalIsOpen = false;
+
+    function openModal() {
+      if (modalIsOpen) return;
+      modalIsOpen = true;
+      contactModal.classList.add('modal-open');
+      lockScroll();
+
+      // Trigger modal title stacked lines
+      const titleLines = contactModal.querySelectorAll('.modal-title-line');
+      titleLines.forEach((l, i) => {
+        setTimeout(() => l.classList.add('revealed'), 90 * i);
+      });
+
+      setTimeout(() => {
+        if (contactNameInput) contactNameInput.focus();
+      }, 120);
+    }
+
+    function closeModal() {
+      if (!modalIsOpen) return;
+      modalIsOpen = false;
+      contactModal.classList.remove('modal-open');
+      unlockScroll();
+
+      const titleLines = contactModal.querySelectorAll('.modal-title-line');
+      setTimeout(() => {
+        titleLines.forEach((l) => l.classList.remove('revealed'));
+        contactForm.reset();
+        contactForm.style.display = 'flex';
+        modalSuccessPanel.classList.remove('active');
+        contactSubmitBtn.textContent = 'Complete Registration';
+        contactSubmitBtn.disabled = false;
+      }, 350);
+    }
+
+    document.querySelectorAll('[data-open-modal]').forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        openModal();
+      });
+    });
+
+    modalCloseBtn.addEventListener('click', closeModal);
+    modalBackdrop.addEventListener('click', closeModal);
+    successDoneBtn.addEventListener('click', closeModal);
+
+    contactForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const rawName = contactNameInput.value.trim();
+      const nameVal = rawName || 'Amir Osman';
+      const emailVal = (contactEmailInput && contactEmailInput.value.trim()) || 'amir.osman@email.com';
+      const phoneVal = (contactPhoneInput && contactPhoneInput.value.trim()) || '+60 12-345 6789';
+      const tierVal = (contactTierSelect && contactTierSelect.value) || 'Annual';
+      const paymentVal = (contactPaymentSelect && contactPaymentSelect.value) || 'Online Banking';
+
+      const firstName = nameVal.split(' ')[0] || 'there';
+
+      contactSubmitBtn.textContent = 'Registering & Syncing…';
+      contactSubmitBtn.disabled = true;
+
+      setTimeout(() => {
+        contactForm.style.display = 'none';
+
+        if (summaryName) summaryName.textContent = nameVal;
+        if (summaryEmail) summaryEmail.textContent = emailVal;
+        if (summaryPhone) summaryPhone.textContent = phoneVal;
+        if (summaryTier) summaryTier.textContent = tierVal;
+        if (summaryPayment) summaryPayment.textContent = paymentVal;
+
+        successMsgText.textContent = `Thanks, ${firstName} — your ${tierVal} membership has been recorded with ${paymentVal}. Member profile has been synced with your database table and automated WhatsApp retention alerts.`;
+        modalSuccessPanel.classList.add('active');
+      }, 500);
+    });
+
+    /* ----------------------------------------------------
+       Fullscreen Menu Overlay Logic
+       ---------------------------------------------------- */
+    const menuOverlay = document.getElementById('menu-overlay');
+    const menuBackdrop = document.getElementById('menu-backdrop');
+    const burgerBtn = document.getElementById('burger-btn');
+    const menuCloseBtn = document.getElementById('menu-close-btn');
+    const menuBookBtn = document.getElementById('menu-book-btn');
+    const menuLinks = document.querySelectorAll('.menu-link');
+
+    let menuIsOpen = false;
+
+    function openMenu() {
+      if (menuIsOpen) return;
+      menuIsOpen = true;
+      menuOverlay.classList.add('menu-open');
+      lockScroll();
+
+      // Staggered rise of links
+      menuLinks.forEach((link, i) => {
+        link.style.transitionDelay = `${120 + i * 70}ms`;
+      });
+    }
+
+    function closeMenu() {
+      if (!menuIsOpen) return;
+      menuIsOpen = false;
+      menuOverlay.classList.remove('menu-open');
+      unlockScroll();
+    }
+
+    burgerBtn.addEventListener('click', openMenu);
+    menuCloseBtn.addEventListener('click', closeMenu);
+    menuBackdrop.addEventListener('click', closeMenu);
+
+    menuBookBtn.addEventListener('click', () => {
+      closeMenu();
+      setTimeout(openModal, 150);
+    });
+
+    menuLinks.forEach((link) => {
+      link.addEventListener('click', (e) => {
+        const href = link.getAttribute('href');
+        if (href && href.startsWith('#')) {
+          e.preventDefault();
+          closeMenu();
+          const target = document.querySelector(href);
+          if (target) {
+            setTimeout(() => {
+              lenis.scrollTo(target, { offset: 0, duration: 1.2 });
+            }, 100);
+          }
+        }
+      });
+    });
+
+    /* ----------------------------------------------------
+       Global Esc Key Handler (Closes Modal / Menu)
+       ---------------------------------------------------- */
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        if (modalIsOpen) closeModal();
+        if (menuIsOpen) closeMenu();
+      }
+    });
+
+    /* ----------------------------------------------------
+       Smooth Scroll For All Internal Anchor Links
+       ---------------------------------------------------- */
+    document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+      anchor.addEventListener('click', (e) => {
+        const id = anchor.getAttribute('href');
+        if (id && id !== '#') {
+          const target = document.querySelector(id);
+          if (target) {
+            e.preventDefault();
+            lenis.scrollTo(target, { offset: 0, duration: 1.2 });
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>
