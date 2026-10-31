@@ -603,14 +603,18 @@
       }
     }
     #hero-title {
-      font-size: 12.5vw;
+      font-size: clamp(3.2rem, 10.2vw, 8.5rem);
       font-weight: 500;
       text-transform: uppercase;
-      line-height: 0.85;
+      line-height: 0.9;
       letter-spacing: -0.02em;
-      white-space: nowrap;
       user-select: none;
     }
+    #hero-title > span:nth-of-type(3),
+    #hero-title .hero-title-break {
+      display: block;
+    }
+
 
     /* Hero Bottom Row */
     .hero-bottom-row {
@@ -1480,16 +1484,21 @@
       inset: 0;
       z-index: 90;
       display: flex;
-      align-items: flex-end;
-      justify-content: center;
-      padding: 0.75rem;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: center;
+      padding: 1rem 0.75rem 1rem;
+      overflow-y: auto;
+      overflow-x: hidden;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
       pointer-events: none;
       visibility: hidden;
     }
     @media (min-width: 640px) {
       #contact-modal {
-        align-items: center;
-        padding: 1.5rem;
+        justify-content: center;
+        padding: 2rem 1.5rem;
       }
     }
     #contact-modal.modal-open {
@@ -1497,13 +1506,14 @@
       visibility: visible;
     }
     .modal-backdrop {
-      position: absolute;
+      position: fixed;
       inset: 0;
-      background: rgba(15, 47, 99, 0.4);
+      background: rgba(15, 47, 99, 0.45);
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
       opacity: 0;
       transition: opacity 0.3s ease;
+      z-index: 1;
     }
     #contact-modal.modal-open .modal-backdrop {
       opacity: 1;
@@ -1512,8 +1522,12 @@
       position: relative;
       width: 100%;
       max-width: 32rem;
-      max-height: 92svh;
+      max-height: 85svh;
       overflow-y: auto;
+      overflow-x: hidden;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
+      touch-action: pan-y;
       border-radius: var(--radius-card-lg);
       background: var(--surface-card);
       padding: 1.5rem;
@@ -1523,10 +1537,13 @@
       transform: translateY(28px) scale(0.96);
       transition: opacity 0.35s var(--ease-out-expo), transform 0.35s var(--ease-out-expo);
       z-index: 2;
+      margin-top: auto;
+      margin-bottom: 0;
     }
     @media (min-width: 640px) {
       .modal-panel {
         padding: 2rem;
+        margin: auto;
       }
     }
     #contact-modal.modal-open .modal-panel {
@@ -1988,7 +2005,7 @@
         <h1 id="hero-title">
           <span class="word-clip"><span class="word-inner hero-title-word">Own</span></span>
           <span class="word-clip"><span class="word-inner hero-title-word">The</span></span>
-          <span class="word-clip"><span class="word-inner hero-title-word">Floor</span></span>
+          <span class="word-clip hero-title-break"><span class="word-inner hero-title-word">Floor</span></span>
         </h1>
       </div>
 
@@ -2488,9 +2505,9 @@
   <!-- ====================================================
        Contact / Registration Modal
        ==================================================== -->
-  <div id="contact-modal" role="dialog" aria-modal="true" aria-labelledby="modal-heading-title">
+  <div id="contact-modal" role="dialog" aria-modal="true" aria-labelledby="modal-heading-title" data-lenis-prevent>
     <div class="modal-backdrop" id="modal-backdrop"></div>
-    <div class="modal-panel" id="modal-panel">
+    <div class="modal-panel" id="modal-panel" data-lenis-prevent>
       <!-- Header -->
       <div class="modal-header-row">
         <div class="eyebrow tone-dark">
@@ -2647,9 +2664,9 @@
   <!-- ====================================================
        Fullscreen Menu Overlay
        ==================================================== -->
-  <div id="menu-overlay" role="dialog" aria-modal="true" aria-label="Main Navigation Menu">
+  <div id="menu-overlay" role="dialog" aria-modal="true" aria-label="Main Navigation Menu" data-lenis-prevent>
     <div class="menu-backdrop" id="menu-backdrop"></div>
-    <div class="menu-panel" id="menu-panel">
+    <div class="menu-panel" id="menu-panel" data-lenis-prevent>
       <div class="menu-inner-container">
         <!-- Top Row -->
         <div class="menu-top-row">
@@ -2740,16 +2757,16 @@
     function lockScroll() {
       isScrollLocked = true;
       lenis.stop();
-      document.documentElement.style.position = 'relative';
+      document.body.style.overflow = 'hidden';
       document.documentElement.style.overflow = 'hidden';
-      document.documentElement.style.height = '100%';
     }
 
     function unlockScroll() {
       isScrollLocked = false;
       lenis.start();
-      document.documentElement.style.removeProperty('position');
+      document.body.style.removeProperty('overflow');
       document.documentElement.style.removeProperty('overflow');
+      document.documentElement.style.removeProperty('position');
       document.documentElement.style.removeProperty('height');
     }
 
@@ -3268,7 +3285,9 @@
       });
 
       setTimeout(() => {
-        if (contactNameInput) contactNameInput.focus();
+        if (contactNameInput && window.innerWidth >= 768) {
+          contactNameInput.focus();
+        }
       }, 120);
     }
 
@@ -3287,6 +3306,17 @@
         contactSubmitBtn.textContent = 'Complete Registration';
         contactSubmitBtn.disabled = false;
       }, 350);
+    }
+
+    // Stop propagation of touch/wheel events inside modal so mobile sliding is effortless
+    const modalPanelEl = document.getElementById('modal-panel');
+    if (modalPanelEl) {
+      modalPanelEl.addEventListener('touchmove', (e) => {
+        e.stopPropagation();
+      }, { passive: true });
+      modalPanelEl.addEventListener('wheel', (e) => {
+        e.stopPropagation();
+      }, { passive: true });
     }
 
     document.querySelectorAll('[data-open-modal]').forEach((btn) => {
